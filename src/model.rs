@@ -72,27 +72,27 @@ impl Model {
     }
 }
 
-fn make_test_entry_group() -> EntryGroup {
-    let entry1 = Entry {
-        command: String::from("command1"),
-        short_info: String::from("Short description 1"),
-        long_info: String::from("Long description 1"),
-    };
-
-    let entry2 = Entry {
-        command: String::from("command2"),
-        short_info: String::from("Short description 2"),
-        long_info: String::from("Long description 2"),
-    };
-
-    let description = String::from("description");
-
-    EntryGroup::new(description, vec![entry1, entry2])
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn make_test_entry_group() -> EntryGroup {
+        let entry1 = Entry {
+            command: String::from("command1"),
+            short_info: String::from("Short description 1"),
+            long_info: String::from("Long description 1"),
+        };
+
+        let entry2 = Entry {
+            command: String::from("command2"),
+            short_info: String::from("Short description 2"),
+            long_info: String::from("Long description 2"),
+        };
+
+        let description = String::from("description");
+
+        EntryGroup::new(description, vec![entry1, entry2])
+    }
 
     #[test]
     fn create_default_model() {

@@ -1,9 +1,11 @@
+mod config;
 mod entry;
 mod message;
 mod model;
 mod model_io;
 mod tui;
 
+use config::{PROJECT_NAME, PROJECT_VERSION};
 use crossterm::event::{self, Event, KeyCode};
 use message::Message;
 use model::{Model, RunningState};
@@ -45,8 +47,6 @@ fn view(_model: &mut Model, f: &mut Frame) {
 }
 
 fn make_main_screen() -> Paragraph<'static> {
-    const PROJECT_NAME: &str = env!("CARGO_PKG_NAME");
-    const PROJECT_VERSION: &str = env!("CARGO_PKG_VERSION");
     let title = Title::from(format!(" {} v{}", PROJECT_NAME, PROJECT_VERSION).bold());
     let block = Block::default()
         .title(title.alignment(Alignment::Center))

@@ -4,8 +4,8 @@ use crate::entry::EntryGroup;
 pub enum RunningState {
     #[default]
     Empty,
-    LoadedAndRunning,
-    SavedAndDone,
+    Loaded,
+    Done,
 }
 
 #[derive(Debug, Default)]

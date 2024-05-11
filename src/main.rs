@@ -16,7 +16,7 @@ fn main() -> color_eyre::Result<()> {
     let mut terminal = tui::init_terminal()?;
 
     // Initialise model
-    let mut model = Model::new("cache_test.json".to_owned());
+    let mut model = Model::new("cache/test.json".to_owned());
     model.load_from_cache();
 
     // Main loop

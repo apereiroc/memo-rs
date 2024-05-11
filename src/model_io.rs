@@ -38,7 +38,7 @@ impl Model {
             }
         }
 
-        self.running_state = RunningState::LoadedAndRunning;
+        self.running_state = RunningState::Loaded;
     }
 
     pub fn save_to_cache(&mut self) {
@@ -60,7 +60,7 @@ impl Model {
         file.write_all(json_data.as_bytes())
             .expect("Failed to write to file");
 
-        self.running_state = RunningState::SavedAndDone;
+        self.running_state = RunningState::Done;
     }
 }
 
@@ -79,13 +79,14 @@ mod tests {
         model.save_to_cache();
 
         model.entries.clear();
+        model.running_state = RunningState::Empty;
 
         model.load_from_cache();
 
         assert_eq!(model.cache_path.len(), 25);
         assert_eq!(model.entries.len(), 1);
         assert_eq!(model.entries[0].entries.len(), 2);
-        assert_eq!(model.running_state, RunningState::LoadedAndRunning);
+        assert_eq!(model.running_state, RunningState::Loaded);
         assert_eq!(model.entries[0].entries[0].command, "command1");
 
         // Cleaning

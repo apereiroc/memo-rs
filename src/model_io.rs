@@ -89,7 +89,7 @@ mod tests {
         assert_eq!(model.entries[0].entries[0].command, "command1");
 
         // Cleaning
-        std::fs::remove_file("./path/to/test/test.cache")?;
+        std::fs::remove_dir_all("./path")?;
         Ok(())
     }
 }

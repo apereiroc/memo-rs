@@ -1,10 +1,10 @@
 use std::fs::File;
 use std::io::prelude::*;
 
-use crate::entry::{Entry, EntryGroup};
+use crate::entry::EntryGroup;
 
 #[derive(Debug, Default, PartialEq, Eq)]
-enum RunningState {
+pub enum RunningState {
     #[default]
     Empty,
     LoadedAndRunning,
@@ -12,10 +12,10 @@ enum RunningState {
 }
 
 #[derive(Debug, Default)]
-struct Model {
+pub struct Model {
     cache_path: String,
     entries: Vec<EntryGroup>,
-    running_state: RunningState,
+    pub running_state: RunningState,
 }
 
 impl Model {
@@ -75,6 +75,7 @@ impl Model {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::entry::Entry;
 
     fn make_test_entry_group() -> EntryGroup {
         let entry1 = Entry {

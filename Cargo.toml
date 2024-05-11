@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 serde_json = "1.0.117"
 serde = { features = ["derive"] }
+arboard = "3.4.0"

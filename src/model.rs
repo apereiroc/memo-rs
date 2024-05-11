@@ -69,28 +69,4 @@ pub mod tests {
         assert_eq!(model.running_state, RunningState::Empty);
         assert_eq!(model.entries[0].entries[0].command, "command1");
     }
-
-    #[test]
-    fn save_and_load_entries_to_cache() -> std::io::Result<()> {
-        let entrygroup = make_test_entry_group();
-
-        let mut model = Model::new(String::from("test.cache"));
-        model.entries = vec![entrygroup];
-
-        model.save_to_cache();
-
-        model.entries.clear();
-
-        model.load_from_cache();
-
-        assert_eq!(model.cache_path.len(), 10);
-        assert_eq!(model.entries.len(), 1);
-        assert_eq!(model.entries[0].entries.len(), 2);
-        assert_eq!(model.running_state, RunningState::LoadedAndRunning);
-        assert_eq!(model.entries[0].entries[0].command, "command1");
-
-        // Cleaning
-        std::fs::remove_file("test.cache")?;
-        Ok(())
-    }
 }

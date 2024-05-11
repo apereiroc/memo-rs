@@ -7,8 +7,10 @@ mod tui;
 use crossterm::event::{self, Event, KeyCode};
 use message::Message;
 use model::{Model, RunningState};
+use ratatui::symbols::border;
+use ratatui::widgets::block::*;
 use ratatui::{prelude::*, widgets::*};
-use std::{io::Empty, time::Duration};
+use std::time::Duration;
 
 fn main() -> color_eyre::Result<()> {
     // Initialise terminal
@@ -38,7 +40,20 @@ fn main() -> color_eyre::Result<()> {
 }
 
 fn view(_model: &mut Model, f: &mut Frame) {
-    f.render_widget(Paragraph::new("Hello world!"), f.size());
+    let widget = make_main_screen();
+    f.render_widget(widget, f.size());
+}
+
+fn make_main_screen() -> Paragraph<'static> {
+    const PROJECT_NAME: &str = env!("CARGO_PKG_NAME");
+    const PROJECT_VERSION: &str = env!("CARGO_PKG_VERSION");
+    let title = Title::from(format!(" {} v{}", PROJECT_NAME, PROJECT_VERSION).bold());
+    let block = Block::default()
+        .title(title.alignment(Alignment::Center))
+        .borders(Borders::ALL)
+        .border_set(border::THICK);
+    let widget = Paragraph::new("").centered().block(block);
+    widget
 }
 
 fn update(model: &mut Model, msg: Message) -> Option<Message> {

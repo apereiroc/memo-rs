@@ -90,46 +90,51 @@ fn make_test_entry_group() -> EntryGroup {
     EntryGroup::new(description, vec![entry1, entry2])
 }
 
-#[test]
-fn create_default_model() {
-    let model = Model::default();
-    assert_eq!(model.cache_path.len(), 0);
-    assert!(model.entries.is_empty());
-    assert_eq!(model.running_state, RunningState::Empty);
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn create_model() {
-    let cache_path = String::from("test.cache");
-    let entrygroup = make_test_entry_group();
+    #[test]
+    fn create_default_model() {
+        let model = Model::default();
+        assert_eq!(model.cache_path.len(), 0);
+        assert!(model.entries.is_empty());
+        assert_eq!(model.running_state, RunningState::Empty);
+    }
 
-    let model = Model::new(cache_path, vec![entrygroup]);
-    assert_eq!(model.cache_path.len(), 10);
-    assert_eq!(model.entries.len(), 1);
-    assert_eq!(model.entries[0].entries.len(), 2);
-    assert_eq!(model.running_state, RunningState::Empty);
-    assert_eq!(model.entries[0].entries[0].command, "command1");
-}
+    #[test]
+    fn create_model() {
+        let cache_path = String::from("test.cache");
+        let entrygroup = make_test_entry_group();
 
-#[test]
-fn save_and_load_entries_to_cache() -> std::io::Result<()> {
-    let entrygroup = make_test_entry_group();
+        let model = Model::new(cache_path, vec![entrygroup]);
+        assert_eq!(model.cache_path.len(), 10);
+        assert_eq!(model.entries.len(), 1);
+        assert_eq!(model.entries[0].entries.len(), 2);
+        assert_eq!(model.running_state, RunningState::Empty);
+        assert_eq!(model.entries[0].entries[0].command, "command1");
+    }
 
-    let mut model = Model::new(String::from("test.cache"), vec![entrygroup]);
+    #[test]
+    fn save_and_load_entries_to_cache() -> std::io::Result<()> {
+        let entrygroup = make_test_entry_group();
 
-    model.save_to_cache();
+        let mut model = Model::new(String::from("test.cache"), vec![entrygroup]);
 
-    model.clear();
+        model.save_to_cache();
 
-    model.load_from_cache();
+        model.clear();
 
-    assert_eq!(model.cache_path.len(), 10);
-    assert_eq!(model.entries.len(), 1);
-    assert_eq!(model.entries[0].entries.len(), 2);
-    assert_eq!(model.running_state, RunningState::LoadedAndRunning);
-    assert_eq!(model.entries[0].entries[0].command, "command1");
+        model.load_from_cache();
 
-    // Cleaning
-    std::fs::remove_file("test.cache")?;
-    Ok(())
+        assert_eq!(model.cache_path.len(), 10);
+        assert_eq!(model.entries.len(), 1);
+        assert_eq!(model.entries[0].entries.len(), 2);
+        assert_eq!(model.running_state, RunningState::LoadedAndRunning);
+        assert_eq!(model.entries[0].entries[0].command, "command1");
+
+        // Cleaning
+        std::fs::remove_file("test.cache")?;
+        Ok(())
+    }
 }

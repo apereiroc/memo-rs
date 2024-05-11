@@ -8,7 +8,7 @@ use crossterm::event::{self, Event, KeyCode};
 use message::Message;
 use model::{Model, RunningState};
 use ratatui::{prelude::*, widgets::*};
-use std::time::Duration;
+use std::{io::Empty, time::Duration};
 
 fn main() -> color_eyre::Result<()> {
     // Initialise terminal
@@ -17,10 +17,9 @@ fn main() -> color_eyre::Result<()> {
 
     // Initialise model
     let mut model = Model::new("cache/test.json".to_owned());
-    model.load_from_cache();
 
     // Main loop
-    while model.running_state != RunningState::SavedAndDone {
+    while model.running_state != RunningState::Done {
         // Render the current view
         terminal.draw(|f| view(&mut model, f))?;
 
@@ -44,9 +43,16 @@ fn view(_model: &mut Model, f: &mut Frame) {
 
 fn update(model: &mut Model, msg: Message) -> Option<Message> {
     match msg {
+        Message::Enter => {
+            // Load the possible cache file
+            // and updates the model
+            model.load_from_cache();
+        }
         Message::Quit => {
-            // You can handle cleanup and exit here
+            // Save current status to cache
+            // and exit
             model.save_to_cache();
+            model.running_state = RunningState::Done;
         }
     };
     None
@@ -56,7 +62,11 @@ fn update(model: &mut Model, msg: Message) -> Option<Message> {
 ///
 /// We don't need to pass in a `model` to this function in this example
 /// but you might need it as your project evolves
-fn handle_event(_: &Model) -> color_eyre::Result<Option<Message>> {
+fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
+    if model.running_state == RunningState::Empty {
+        return Ok(Some(Message::Enter));
+    }
+
     if event::poll(Duration::from_millis(250))? {
         if let Event::Key(key) = event::read()? {
             if key.kind == event::KeyEventKind::Press {

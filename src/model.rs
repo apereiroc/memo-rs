@@ -10,16 +10,16 @@ pub enum RunningState {
 
 #[derive(Debug, Default)]
 pub struct Model {
-    pub cache_path: String,
+    pub file: String,
     pub(crate) entries: Vec<EntryGroup>,
     pub running_state: RunningState,
     pub idx_entry: usize,
 }
 
 impl Model {
-    pub fn new(cache_path: String) -> Model {
+    pub fn new(file: String) -> Model {
         Model {
-            cache_path,
+            file,
             entries: vec![],
             running_state: RunningState::Empty,
             idx_entry: 0,
@@ -64,19 +64,19 @@ pub mod tests {
     #[test]
     fn create_default_model() {
         let model = Model::default();
-        assert_eq!(model.cache_path.len(), 0);
+        assert_eq!(model.file.len(), 0);
         assert!(model.entries.is_empty());
         assert_eq!(model.running_state, RunningState::Empty);
     }
 
     #[test]
     fn create_model() {
-        let cache_path = String::from("test.cache");
+        let file = String::from("test.cache");
         let entrygroup = make_test_entry_group();
 
-        let mut model = Model::new(cache_path);
+        let mut model = Model::new(file);
         model.entries = vec![entrygroup];
-        assert_eq!(model.cache_path.len(), 10);
+        assert_eq!(model.file.len(), 10);
         assert_eq!(model.entries.len(), 1);
         assert_eq!(model.entries[0].entries.len(), 2);
         assert_eq!(model.running_state, RunningState::Empty);

@@ -9,12 +9,12 @@ use std::path::Path;
 
 impl Model {
     pub fn load_from_cache(&mut self) {
-        if self.cache_path.is_empty() {
+        if self.file.is_empty() {
             panic!("Trying to read previous status, but no path was specified");
         }
 
         // Attempt to open the file
-        let file_result = File::open(&self.cache_path);
+        let file_result = File::open(&self.file);
 
         // Check if the file was successfully opened
         match file_result {
@@ -42,7 +42,7 @@ impl Model {
     }
 
     pub fn save_to_cache(&mut self) {
-        if self.cache_path.is_empty() {
+        if self.file.is_empty() {
             panic!("Trying to save current status, but no path was specified");
         }
 
@@ -50,12 +50,12 @@ impl Model {
         let json_data = serde_json::to_string_pretty(&self.entries).expect("Serialization failed");
 
         // Ensure the parent directories exist
-        let parent_dir = Path::new(&self.cache_path).parent().unwrap();
+        let parent_dir = Path::new(&self.file).parent().unwrap();
         if !parent_dir.exists() {
             create_dir_all(parent_dir).expect("Failed to create directories");
         }
 
-        let mut file = File::create(&self.cache_path).expect("Failed to create the cache file");
+        let mut file = File::create(&self.file).expect("Failed to create the cache file");
 
         file.write_all(json_data.as_bytes())
             .expect("Failed to write to file");
@@ -83,7 +83,7 @@ mod tests {
 
         model.load_from_cache();
 
-        assert_eq!(model.cache_path.len(), 25);
+        assert_eq!(model.file.len(), 25);
         assert_eq!(model.entries.len(), 1);
         assert_eq!(model.entries[0].entries.len(), 2);
         assert_eq!(model.running_state, RunningState::Loaded);

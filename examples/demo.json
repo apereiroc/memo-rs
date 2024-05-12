@@ -1,0 +1,57 @@
+[
+  {
+    "description": "Git",
+    "entries": [
+      {
+        "command": "git add <file>",
+        "short_info": "Add file contents to the index",
+        "long_info": "This command updates the index using the current content found in the working tree, to prepare the content staged for the next commit. It typically adds the current content of existing paths as a whole, but with some options it can also be used to add content with only part of the changes made to the working tree files applied, or remove paths that do not exist in the working tree anymore."
+      },
+      {
+        "command": "git commit -m <message>",
+        "short_info": "Record changes to the repository",
+        "long_info": "Create a new commit containing the current contents of the index and the given log message describing the changes. The new commit is a direct child of HEAD, usually the tip of the current branch, and the branch is updated to point to it (unless no branch is associated with the working tree, in which case HEAD is detached."
+      }
+    ]
+  },
+  {
+    "description": "C++",
+    "entries": [
+      {
+        "command": "g++ --help",
+        "short_info": "Print help",
+        "long_info": "Display the full list of available options to pass to the compiler as command line arguments"
+      },
+      {
+        "command": "g++ -o main main.cpp -I<include-path> -L<lib-path> -std=c++17",
+        "short_info": "Get binary file",
+        "long_info": "Compile the source program, looking for possible headers in the include-path and possible libraries in lib-path. Use the C++17 standard."
+      }
+    ]
+  },
+  {
+    "description": "Cargo",
+    "entries": [
+      {
+        "command": "cargo --help",
+        "short_info": "Print help",
+        "long_info": "Display the full list of available options to pass to the compiler as command line arguments"
+      },
+      {
+        "command": "cargo build",
+        "short_info": "Compile the package",
+        "long_info": "Compile the package and bla bla bla..."
+      },
+      {
+        "command": "cargo test",
+        "short_info": "Run the tests",
+        "long_info": "Run the tests and bla bla bla..."
+      },
+      {
+        "command": "cargo update",
+        "short_info": "Update dependencies listed in Cargo.lock",
+        "long_info": "Update dependencies listed in Cargo.lock and bla bla bla..."
+      }
+    ]
+  }
+]

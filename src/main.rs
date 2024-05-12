@@ -5,8 +5,9 @@ mod model;
 mod model_io;
 mod tui;
 
-use config::{PROJECT_NAME, PROJECT_VERSION};
+use config::{PROJECT_AUTHOR, PROJECT_NAME, PROJECT_VERSION};
 use crossterm::event::{self, Event, KeyCode};
+use entry::{Entry, EntryGroup};
 use message::Message;
 use model::{Model, RunningState};
 use ratatui::symbols::border;
@@ -41,27 +42,96 @@ fn main() -> color_eyre::Result<()> {
     Ok(())
 }
 
-fn view(_model: &mut Model, f: &mut Frame) {
-    let widget = make_main_screen();
-    f.render_widget(widget, f.size());
+fn view(model: &Model, f: &mut Frame) {
+    make_main_screen(model, f);
 }
 
-fn make_main_screen() -> Paragraph<'static> {
-    let title = Title::from(format!(" {} v{}", PROJECT_NAME, PROJECT_VERSION).bold());
-    let block = Block::default()
-        .title(title.alignment(Alignment::Center))
+fn make_main_screen(model: &Model, f: &mut Frame) {
+    let main_layout = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Length(3),
+            Constraint::Min(1),
+            Constraint::Length(3),
+        ])
+        .split(f.size());
+
+    // Make title block
+    let title_block = Block::default()
         .borders(Borders::ALL)
-        .border_set(border::THICK);
-    let widget = Paragraph::new("").centered().block(block);
-    widget
+        .style(Style::default());
+
+    let title = Paragraph::new(Text::from(
+        format!(
+            " {} v{} -- {} ",
+            PROJECT_NAME, PROJECT_VERSION, PROJECT_AUTHOR
+        )
+        .bold()
+        .yellow(),
+    ))
+    .block(title_block)
+    .centered();
+
+    f.render_widget(title, main_layout[0]);
+
+    // Make instruction block
+    let instruction_block = Block::default()
+        .borders(Borders::ALL)
+        .style(Style::default());
+
+    let title = Paragraph::new(Text::from(" <q>: quit ").bold().yellow())
+        .block(instruction_block)
+        .centered();
+
+    f.render_widget(title, main_layout[2]);
+
+    // Make data block
+    let data_layout = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints(vec![Constraint::Percentage(25), Constraint::Percentage(75)])
+        .split(main_layout[1]);
+    let data_block = Block::default()
+        .borders(Borders::ALL)
+        .title("List of entries")
+        .style(Style::default());
+
+    let mut list_items = Vec::<ListItem>::new();
+    for entry in &model.entries {
+        list_items.push(ListItem::new(Line::from(Span::styled(
+            &entry.description,
+            Style::default().fg(Color::Yellow),
+        ))));
+    }
+
+    let list = List::new(list_items)
+        .block(data_block)
+        .style(Style::default().fg(Color::White))
+        .highlight_style(Style::default().add_modifier(Modifier::ITALIC))
+        .highlight_symbol(">>")
+        .repeat_highlight_symbol(true)
+        .direction(ListDirection::TopToBottom);
+
+    let mut state = ListState::default();
+    state.select(Some(model.idx_entry));
+
+    f.render_stateful_widget(list, data_layout[0], &mut state);
 }
 
 fn update(model: &mut Model, msg: Message) -> Option<Message> {
+    // println!("Message: {:?}", msg);
     match msg {
         Message::Enter => {
             // Load the possible cache file
             // and updates the model
             model.load_from_cache();
+        }
+        Message::NextEntry => {
+            // Go to next entry in entry group
+            model.next_entry();
+        }
+        Message::PreviousEntry => {
+            // Go to previous entry in entry group
+            model.previous_entry();
         }
         Message::Quit => {
             // Save current status to cache
@@ -74,9 +144,6 @@ fn update(model: &mut Model, msg: Message) -> Option<Message> {
 }
 
 /// Convert Event to Message
-///
-/// We don't need to pass in a `model` to this function in this example
-/// but you might need it as your project evolves
 fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
     if model.running_state == RunningState::Empty {
         return Ok(Some(Message::Enter));
@@ -95,6 +162,8 @@ fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
 fn handle_key(key: event::KeyEvent) -> Option<Message> {
     match key.code {
         KeyCode::Char('q') => Some(Message::Quit),
+        KeyCode::Down => Some(Message::NextEntry),
+        KeyCode::Up => Some(Message::PreviousEntry),
         _ => None,
     }
 }

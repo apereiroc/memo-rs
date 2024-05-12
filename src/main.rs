@@ -15,13 +15,26 @@ use ratatui::widgets::block::*;
 use ratatui::{prelude::*, widgets::*};
 use std::time::Duration;
 
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[command(version, about)]
+struct Args {
+    /// TODO: set cache thing (default value?)
+    #[arg(short, long)]
+    filename: String,
+}
+
 fn main() -> color_eyre::Result<()> {
+    // Get command line arguments
+    let args = Args::parse();
+
     // Initialise terminal
     tui::install_panic_hook();
     let mut terminal = tui::init_terminal()?;
 
     // Initialise model
-    let mut model = Model::new("cache/test.json".to_owned());
+    let mut model = Model::new(args.filename);
 
     // Main loop
     while model.running_state != RunningState::Done {

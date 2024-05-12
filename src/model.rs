@@ -13,6 +13,7 @@ pub struct Model {
     pub cache_path: String,
     pub(crate) entries: Vec<EntryGroup>,
     pub running_state: RunningState,
+    pub idx_entry: usize,
 }
 
 impl Model {
@@ -21,7 +22,19 @@ impl Model {
             cache_path,
             entries: vec![],
             running_state: RunningState::Empty,
+            idx_entry: 0,
         }
+    }
+
+    pub fn next_entry(&mut self) {
+        self.idx_entry = (self.idx_entry + 1) % self.entries.len();
+    }
+
+    pub fn previous_entry(&mut self) {
+        self.idx_entry = match self.idx_entry {
+            0 => self.entries.len() - 1,
+            _ => self.idx_entry - 1,
+        };
     }
 }
 
@@ -68,5 +81,75 @@ pub mod tests {
         assert_eq!(model.entries[0].entries.len(), 2);
         assert_eq!(model.running_state, RunningState::Empty);
         assert_eq!(model.entries[0].entries[0].command, "command1");
+    }
+
+    #[test]
+    fn increase_index_entry() {
+        let mut model = Model::default();
+
+        let mut egs: Vec<EntryGroup> = vec![];
+        for _ in 0..10 {
+            let entry = Entry {
+                command: "".to_owned(),
+                short_info: "".to_owned(),
+                long_info: "".to_owned(),
+            };
+            let eg = EntryGroup::new("".to_owned(), vec![entry]);
+
+            egs.push(eg);
+        }
+
+        model.entries = egs;
+
+        assert_eq!(model.idx_entry, 0);
+        model.next_entry();
+        assert_eq!(model.idx_entry, 1);
+        model.next_entry();
+        assert_eq!(model.idx_entry, 2);
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        assert_eq!(model.idx_entry, 9);
+        model.next_entry();
+        assert_eq!(model.idx_entry, 0);
+    }
+
+    #[test]
+    fn decrease_index_entry() {
+        let mut model = Model::default();
+
+        let mut egs: Vec<EntryGroup> = vec![];
+        for _ in 0..10 {
+            let entry = Entry {
+                command: "".to_owned(),
+                short_info: "".to_owned(),
+                long_info: "".to_owned(),
+            };
+            let eg = EntryGroup::new("".to_owned(), vec![entry]);
+
+            egs.push(eg);
+        }
+
+        model.entries = egs;
+
+        assert_eq!(model.idx_entry, 0);
+        model.previous_entry();
+        assert_eq!(model.idx_entry, 9);
+        model.previous_entry();
+        assert_eq!(model.idx_entry, 8);
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        assert_eq!(model.idx_entry, 1);
+        model.previous_entry();
+        assert_eq!(model.idx_entry, 0);
     }
 }

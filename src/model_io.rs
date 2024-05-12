@@ -47,7 +47,7 @@ impl Model {
         }
 
         // Serialize EntryGroups to JSON
-        let json_data = serde_json::to_string(&self.entries).expect("Serialization failed");
+        let json_data = serde_json::to_string_pretty(&self.entries).expect("Serialization failed");
 
         // Ensure the parent directories exist
         let parent_dir = Path::new(&self.cache_path).parent().unwrap();

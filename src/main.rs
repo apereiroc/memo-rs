@@ -92,9 +92,13 @@ fn make_main_screen(model: &Model, f: &mut Frame) {
         .borders(Borders::ALL)
         .style(Style::default());
 
-    let title = Paragraph::new(Text::from(" <q>: quit ").bold().yellow())
-        .block(instruction_block)
-        .centered();
+    let title = Paragraph::new(
+        Text::from(" <Up>: go previous   <Down>, <Tab>: go next   <q>: quit ")
+            .bold()
+            .yellow(),
+    )
+    .block(instruction_block)
+    .centered();
 
     f.render_widget(title, main_layout[2]);
 
@@ -175,7 +179,7 @@ fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
 fn handle_key(key: event::KeyEvent) -> Option<Message> {
     match key.code {
         KeyCode::Char('q') => Some(Message::Quit),
-        KeyCode::Down => Some(Message::NextEntry),
+        KeyCode::Down | KeyCode::Tab => Some(Message::NextEntry),
         KeyCode::Up => Some(Message::PreviousEntry),
         _ => None,
     }

@@ -11,12 +11,20 @@ pub enum RunningState {
     Done,
 }
 
+#[derive(Debug, Default, PartialEq)]
+pub enum CurrentScreen {
+    #[default]
+    Main,
+    Secondary,
+}
+
 #[derive(Debug, Default)]
 pub struct Model {
     pub file: String,
     pub(crate) entries: Vec<EntryGroup>,
     pub running_state: RunningState,
     pub idx_entrygroup: usize,
+    pub current_screen: CurrentScreen,
 }
 
 impl Model {
@@ -26,6 +34,7 @@ impl Model {
             entries: vec![],
             running_state: RunningState::Empty,
             idx_entrygroup: 0,
+            current_screen: CurrentScreen::Main,
         }
     }
 
@@ -70,6 +79,7 @@ pub mod tests {
         assert_eq!(model.file.len(), 0);
         assert!(model.entries.is_empty());
         assert_eq!(model.running_state, RunningState::Empty);
+        assert_eq!(model.current_screen, CurrentScreen::Main);
     }
 
     #[test]
@@ -84,6 +94,7 @@ pub mod tests {
         assert_eq!(model.entries[0].entries.len(), 2);
         assert_eq!(model.running_state, RunningState::Empty);
         assert_eq!(model.entries[0].entries[0].command, "command1");
+        assert_eq!(model.current_screen, CurrentScreen::Main);
     }
 
     #[test]

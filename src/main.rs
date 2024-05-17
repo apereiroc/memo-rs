@@ -2,13 +2,15 @@ mod config;
 mod message;
 mod model;
 mod ui;
-use crate::model::entry;
-use crate::ui::main_screen::make_main_screen;
-use crate::ui::tui;
+
+use model::entry;
+use ui::main_screen::make_main_screen;
+use ui::secondary_screen::make_secondary_screen;
+use ui::tui;
 
 use crossterm::event::{self, Event, KeyCode};
 use message::Message;
-use model::{Model, RunningState};
+use model::{CurrentScreen, Model, RunningState};
 use ratatui::prelude::*;
 use std::time::Duration;
 
@@ -53,43 +55,43 @@ fn main() -> color_eyre::Result<()> {
 }
 
 fn view(model: &Model, f: &mut Frame) {
-    if model.running_state != RunningState::Empty {
-        make_main_screen(model, f);
+    match model.current_screen {
+        CurrentScreen::Main => match model.running_state {
+            RunningState::Empty => (),
+            _ => make_main_screen(model, f),
+        },
+        CurrentScreen::Secondary => make_secondary_screen(model, f),
     }
 }
 
 fn update(model: &mut Model, msg: Message) -> Option<Message> {
-    // println!("Message: {:?}", msg);
     match msg {
+        // Load the possible cache file
+        // and updates the model
         Message::Init => {
-            // Load the possible cache file
-            // and updates the model
             model.load_from_cache();
         }
-        Message::NextEntryGroup => {
-            // Go to next entry group
+        // If main screen: go to next entry group
+        // If secondary screen: go to next entry
+        Message::NextEntry => {
             model.next_entrygroup();
         }
-        Message::PreviousEntryGroup => {
-            // Go to previous entry group
+        // If main screen: go to previous entry group
+        // If secondary screen: go to previous entry
+        Message::PreviousEntry => {
             model.previous_entrygroup();
         }
-        Message::NextEntry => {
-            // Go to next entry group
-            //model.next_entry();
-            todo!()
-        }
-        Message::PreviousEntry => {
-            // Go to previous entry group
-            //model.previous_entry();
-            todo!()
-        }
+        // Go to the secondary screen
         Message::Enter => {
-            todo!();
+            model.current_screen = CurrentScreen::Secondary;
         }
+        // Go to the main screen
+        Message::Back => {
+            model.current_screen = CurrentScreen::Main;
+        }
+        // Save current status to cache
+        // and exit
         Message::Quit => {
-            // Save current status to cache
-            // and exit
             model.save_to_cache();
         }
     };
@@ -115,9 +117,10 @@ fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
 fn handle_key(key: event::KeyEvent) -> Option<Message> {
     match key.code {
         KeyCode::Char('q') => Some(Message::Quit),
-        KeyCode::Down | KeyCode::Tab => Some(Message::NextEntryGroup),
-        KeyCode::Up => Some(Message::PreviousEntryGroup),
+        KeyCode::Down | KeyCode::Tab => Some(Message::NextEntry),
+        KeyCode::Up => Some(Message::PreviousEntry),
         KeyCode::Enter => Some(Message::Enter),
+        KeyCode::Esc => Some(Message::Back),
         _ => None,
     }
 }

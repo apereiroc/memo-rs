@@ -66,11 +66,11 @@ fn update(model: &mut Model, msg: Message) -> Option<Message> {
             // and updates the model
             model.load_from_cache();
         }
-        Message::NextEntry => {
+        Message::NextEntryGroup => {
             // Go to next entry in entry group
             model.next_entrygroup();
         }
-        Message::PreviousEntry => {
+        Message::PreviousEntryGroup => {
             // Go to previous entry in entry group
             model.previous_entrygroup();
         }
@@ -106,8 +106,8 @@ fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
 fn handle_key(key: event::KeyEvent) -> Option<Message> {
     match key.code {
         KeyCode::Char('q') => Some(Message::Quit),
-        KeyCode::Down | KeyCode::Tab => Some(Message::NextEntry),
-        KeyCode::Up => Some(Message::PreviousEntry),
+        KeyCode::Down | KeyCode::Tab => Some(Message::NextEntryGroup),
+        KeyCode::Up => Some(Message::PreviousEntryGroup),
         KeyCode::Enter => Some(Message::Enter),
         _ => None,
     }

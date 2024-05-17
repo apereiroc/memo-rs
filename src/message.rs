@@ -3,5 +3,6 @@ pub enum Message {
     Init,
     NextEntry,
     PreviousEntry,
+    Enter,
     Quit,
 }

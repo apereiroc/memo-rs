@@ -67,12 +67,22 @@ fn update(model: &mut Model, msg: Message) -> Option<Message> {
             model.load_from_cache();
         }
         Message::NextEntryGroup => {
-            // Go to next entry in entry group
+            // Go to next entry group
             model.next_entrygroup();
         }
         Message::PreviousEntryGroup => {
-            // Go to previous entry in entry group
+            // Go to previous entry group
             model.previous_entrygroup();
+        }
+        Message::NextEntry => {
+            // Go to next entry group
+            //model.next_entry();
+            todo!()
+        }
+        Message::PreviousEntry => {
+            // Go to previous entry group
+            //model.previous_entry();
+            todo!()
         }
         Message::Enter => {
             todo!();
@@ -81,7 +91,6 @@ fn update(model: &mut Model, msg: Message) -> Option<Message> {
             // Save current status to cache
             // and exit
             model.save_to_cache();
-            model.running_state = RunningState::Done;
         }
     };
     None

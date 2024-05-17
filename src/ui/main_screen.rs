@@ -42,7 +42,7 @@ pub fn make_main_screen(model: &Model, f: &mut Frame) {
 //  ---------------------------
 // |                           |
 //  ---------------------------
-fn make_title(_: &Model, f: &mut Frame, area: Rect) {
+pub(crate) fn make_title(_: &Model, f: &mut Frame, area: Rect) {
     // Make title block
     let title_block = Block::default()
         .borders(Borders::ALL)
@@ -154,7 +154,6 @@ fn make_preview(model: &Model, f: &mut Frame, area: Rect) {
     let inner_area = outer_block.inner(outer_area);
 
     // Get list of items
-
     let items: Vec<String> = model.entries[model.idx_entrygroup]
         .entries
         .iter()
@@ -184,7 +183,7 @@ fn make_preview(model: &Model, f: &mut Frame, area: Rect) {
 //  ---------------------------
 // |           THIS            |
 //  ---------------------------
-fn make_instructions(_: &Model, f: &mut Frame, area: Rect) {
+pub(crate) fn make_instructions(_: &Model, f: &mut Frame, area: Rect) {
     // Make instruction block
     let instruction_block = Block::default()
         .borders(Borders::ALL)

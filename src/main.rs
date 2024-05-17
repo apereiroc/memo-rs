@@ -74,12 +74,12 @@ fn update(model: &mut Model, msg: Message) -> Option<Message> {
         // If main screen: go to next entry group
         // If secondary screen: go to next entry
         Message::NextEntry => {
-            model.next_entrygroup();
+            model.next_entry();
         }
         // If main screen: go to previous entry group
         // If secondary screen: go to previous entry
         Message::PreviousEntry => {
-            model.previous_entrygroup();
+            model.previous_entry();
         }
         // Go to the secondary screen
         Message::Enter => {

@@ -157,16 +157,16 @@ fn make_entries(model: &Model, f: &mut Frame, area: Rect) {
     let items: Vec<String> = model
         .entries
         .iter()
-        .map(|entry_group| entry_group.description.clone())
+        .map(|entry_group| "· ".to_string() + &entry_group.description)
         .collect();
 
     let items = List::new(items)
         .block(inner_block)
-        .style(Style::default().fg(Color::Yellow))
+        .style(Style::default().fg(Color::White))
         .highlight_style(
             Style::default()
                 .add_modifier(Modifier::BOLD)
-                .bg(Color::Blue),
+                .bg(Color::LightCyan),
         )
         .highlight_symbol(">> ")
         // .scroll_padding(1)

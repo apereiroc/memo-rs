@@ -16,7 +16,7 @@ pub struct Model {
     pub file: String,
     pub(crate) entries: Vec<EntryGroup>,
     pub running_state: RunningState,
-    pub idx_entry: usize,
+    pub idx_entrygroup: usize,
 }
 
 impl Model {
@@ -25,18 +25,18 @@ impl Model {
             file,
             entries: vec![],
             running_state: RunningState::Empty,
-            idx_entry: 0,
+            idx_entrygroup: 0,
         }
     }
 
-    pub fn next_entry(&mut self) {
-        self.idx_entry = (self.idx_entry + 1) % self.entries.len();
+    pub fn next_entrygroup(&mut self) {
+        self.idx_entrygroup = (self.idx_entrygroup + 1) % self.entries.len();
     }
 
-    pub fn previous_entry(&mut self) {
-        self.idx_entry = match self.idx_entry {
+    pub fn previous_entrygroup(&mut self) {
+        self.idx_entrygroup = match self.idx_entrygroup {
             0 => self.entries.len() - 1,
-            _ => self.idx_entry - 1,
+            _ => self.idx_entrygroup - 1,
         };
     }
 }
@@ -104,21 +104,21 @@ pub mod tests {
 
         model.entries = egs;
 
-        assert_eq!(model.idx_entry, 0);
-        model.next_entry();
-        assert_eq!(model.idx_entry, 1);
-        model.next_entry();
-        assert_eq!(model.idx_entry, 2);
-        model.next_entry();
-        model.next_entry();
-        model.next_entry();
-        model.next_entry();
-        model.next_entry();
-        model.next_entry();
-        model.next_entry();
-        assert_eq!(model.idx_entry, 9);
-        model.next_entry();
-        assert_eq!(model.idx_entry, 0);
+        assert_eq!(model.idx_entrygroup, 0);
+        model.next_entrygroup();
+        assert_eq!(model.idx_entrygroup, 1);
+        model.next_entrygroup();
+        assert_eq!(model.idx_entrygroup, 2);
+        model.next_entrygroup();
+        model.next_entrygroup();
+        model.next_entrygroup();
+        model.next_entrygroup();
+        model.next_entrygroup();
+        model.next_entrygroup();
+        model.next_entrygroup();
+        assert_eq!(model.idx_entrygroup, 9);
+        model.next_entrygroup();
+        assert_eq!(model.idx_entrygroup, 0);
     }
 
     #[test]
@@ -139,20 +139,20 @@ pub mod tests {
 
         model.entries = egs;
 
-        assert_eq!(model.idx_entry, 0);
-        model.previous_entry();
-        assert_eq!(model.idx_entry, 9);
-        model.previous_entry();
-        assert_eq!(model.idx_entry, 8);
-        model.previous_entry();
-        model.previous_entry();
-        model.previous_entry();
-        model.previous_entry();
-        model.previous_entry();
-        model.previous_entry();
-        model.previous_entry();
-        assert_eq!(model.idx_entry, 1);
-        model.previous_entry();
-        assert_eq!(model.idx_entry, 0);
+        assert_eq!(model.idx_entrygroup, 0);
+        model.previous_entrygroup();
+        assert_eq!(model.idx_entrygroup, 9);
+        model.previous_entrygroup();
+        assert_eq!(model.idx_entrygroup, 8);
+        model.previous_entrygroup();
+        model.previous_entrygroup();
+        model.previous_entrygroup();
+        model.previous_entrygroup();
+        model.previous_entrygroup();
+        model.previous_entrygroup();
+        model.previous_entrygroup();
+        assert_eq!(model.idx_entrygroup, 1);
+        model.previous_entrygroup();
+        assert_eq!(model.idx_entrygroup, 0);
     }
 }

@@ -38,11 +38,11 @@ impl Model {
         }
     }
 
-    pub fn next_entrygroup(&mut self) {
+    pub fn next_entry(&mut self) {
         self.idx_entrygroup = (self.idx_entrygroup + 1) % self.entries.len();
     }
 
-    pub fn previous_entrygroup(&mut self) {
+    pub fn previous_entry(&mut self) {
         self.idx_entrygroup = match self.idx_entrygroup {
             0 => self.entries.len() - 1,
             _ => self.idx_entrygroup - 1,
@@ -116,19 +116,19 @@ pub mod tests {
         model.entries = egs;
 
         assert_eq!(model.idx_entrygroup, 0);
-        model.next_entrygroup();
+        model.next_entry();
         assert_eq!(model.idx_entrygroup, 1);
-        model.next_entrygroup();
+        model.next_entry();
         assert_eq!(model.idx_entrygroup, 2);
-        model.next_entrygroup();
-        model.next_entrygroup();
-        model.next_entrygroup();
-        model.next_entrygroup();
-        model.next_entrygroup();
-        model.next_entrygroup();
-        model.next_entrygroup();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
         assert_eq!(model.idx_entrygroup, 9);
-        model.next_entrygroup();
+        model.next_entry();
         assert_eq!(model.idx_entrygroup, 0);
     }
 
@@ -151,19 +151,19 @@ pub mod tests {
         model.entries = egs;
 
         assert_eq!(model.idx_entrygroup, 0);
-        model.previous_entrygroup();
+        model.previous_entry();
         assert_eq!(model.idx_entrygroup, 9);
-        model.previous_entrygroup();
+        model.previous_entry();
         assert_eq!(model.idx_entrygroup, 8);
-        model.previous_entrygroup();
-        model.previous_entrygroup();
-        model.previous_entrygroup();
-        model.previous_entrygroup();
-        model.previous_entrygroup();
-        model.previous_entrygroup();
-        model.previous_entrygroup();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
         assert_eq!(model.idx_entrygroup, 1);
-        model.previous_entrygroup();
+        model.previous_entry();
         assert_eq!(model.idx_entrygroup, 0);
     }
 }

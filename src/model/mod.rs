@@ -24,6 +24,7 @@ pub struct Model {
     pub(crate) entries: Vec<EntryGroup>,
     pub running_state: RunningState,
     pub idx_entrygroup: usize,
+    pub idx_entry: usize,
     pub current_screen: CurrentScreen,
 }
 
@@ -34,19 +35,38 @@ impl Model {
             entries: vec![],
             running_state: RunningState::Empty,
             idx_entrygroup: 0,
+            idx_entry: 0,
             current_screen: CurrentScreen::Main,
         }
     }
 
     pub fn next_entry(&mut self) {
-        self.idx_entrygroup = (self.idx_entrygroup + 1) % self.entries.len();
+        match self.current_screen {
+            CurrentScreen::Main => {
+                self.idx_entrygroup = (self.idx_entrygroup + 1) % self.entries.len();
+            }
+            CurrentScreen::Secondary => {
+                self.idx_entry =
+                    (self.idx_entry + 1) % self.entries[self.idx_entrygroup].entries.len();
+            }
+        }
     }
 
     pub fn previous_entry(&mut self) {
-        self.idx_entrygroup = match self.idx_entrygroup {
-            0 => self.entries.len() - 1,
-            _ => self.idx_entrygroup - 1,
-        };
+        match self.current_screen {
+            CurrentScreen::Main => {
+                self.idx_entrygroup = match self.idx_entrygroup {
+                    0 => self.entries.len() - 1,
+                    _ => self.idx_entrygroup - 1,
+                };
+            }
+            CurrentScreen::Secondary => {
+                self.idx_entry = match self.idx_entry {
+                    0 => self.entries[self.idx_entrygroup].entries.len() - 1,
+                    _ => self.idx_entry - 1,
+                };
+            }
+        }
     }
 }
 
@@ -80,6 +100,8 @@ pub mod tests {
         assert!(model.entries.is_empty());
         assert_eq!(model.running_state, RunningState::Empty);
         assert_eq!(model.current_screen, CurrentScreen::Main);
+        assert_eq!(model.idx_entrygroup, 0);
+        assert_eq!(model.idx_entry, 0);
     }
 
     #[test]
@@ -94,11 +116,13 @@ pub mod tests {
         assert_eq!(model.entries[0].entries.len(), 2);
         assert_eq!(model.running_state, RunningState::Empty);
         assert_eq!(model.entries[0].entries[0].command, "command1");
+        assert_eq!(model.idx_entrygroup, 0);
+        assert_eq!(model.idx_entry, 0);
         assert_eq!(model.current_screen, CurrentScreen::Main);
     }
 
     #[test]
-    fn increase_index_entry() {
+    fn increase_index_entrygroup() {
         let mut model = Model::default();
 
         let mut egs: Vec<EntryGroup> = vec![];
@@ -133,7 +157,7 @@ pub mod tests {
     }
 
     #[test]
-    fn decrease_index_entry() {
+    fn decrease_index_entrygroup() {
         let mut model = Model::default();
 
         let mut egs: Vec<EntryGroup> = vec![];
@@ -165,5 +189,85 @@ pub mod tests {
         assert_eq!(model.idx_entrygroup, 1);
         model.previous_entry();
         assert_eq!(model.idx_entrygroup, 0);
+    }
+
+    #[test]
+    fn increase_index_entry() {
+        let mut model = Model::default();
+
+        let mut entries: Vec<Entry> = vec![];
+        for _ in 0..10 {
+            let entry = Entry {
+                command: "".to_owned(),
+                short_info: "".to_owned(),
+                long_info: "".to_owned(),
+            };
+
+            entries.push(entry);
+        }
+
+        let eg = EntryGroup::new("".to_owned(), entries);
+
+        model.entries = vec![eg];
+        model.current_screen = CurrentScreen::Secondary;
+
+        assert_eq!(model.idx_entrygroup, 0);
+        assert_eq!(model.idx_entry, 0);
+        model.next_entry();
+        assert_eq!(model.idx_entrygroup, 0);
+        assert_eq!(model.idx_entry, 1);
+        model.next_entry();
+        assert_eq!(model.idx_entrygroup, 0);
+        assert_eq!(model.idx_entry, 2);
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        model.next_entry();
+        assert_eq!(model.idx_entry, 9);
+        model.next_entry();
+        assert_eq!(model.idx_entry, 0);
+    }
+
+    #[test]
+    fn decrease_index_entry() {
+        let mut model = Model::default();
+
+        let mut entries: Vec<Entry> = vec![];
+        for _ in 0..10 {
+            let entry = Entry {
+                command: "".to_owned(),
+                short_info: "".to_owned(),
+                long_info: "".to_owned(),
+            };
+
+            entries.push(entry);
+        }
+
+        let eg = EntryGroup::new("".to_owned(), entries);
+
+        model.entries = vec![eg];
+        model.current_screen = CurrentScreen::Secondary;
+
+        assert_eq!(model.idx_entrygroup, 0);
+        assert_eq!(model.idx_entry, 0);
+        model.previous_entry();
+        assert_eq!(model.idx_entry, 9);
+        assert_eq!(model.idx_entrygroup, 0);
+        model.previous_entry();
+        assert_eq!(model.idx_entry, 8);
+        assert_eq!(model.idx_entrygroup, 0);
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        model.previous_entry();
+        assert_eq!(model.idx_entry, 1);
+        model.previous_entry();
+        assert_eq!(model.idx_entry, 0);
     }
 }

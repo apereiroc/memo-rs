@@ -1,6 +1,6 @@
 #[derive(PartialEq, Debug)]
 pub enum Message {
-    Enter,
+    Init,
     NextEntry,
     PreviousEntry,
     Quit,

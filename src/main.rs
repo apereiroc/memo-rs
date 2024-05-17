@@ -7,10 +7,8 @@ use crate::ui::tui;
 
 use config::{PROJECT_AUTHOR, PROJECT_NAME, PROJECT_VERSION};
 use crossterm::event::{self, Event, KeyCode};
-use entry::{Entry, EntryGroup};
 use message::Message;
 use model::{Model, RunningState};
-use ratatui::symbols::border;
 use ratatui::widgets::block::*;
 use ratatui::{prelude::*, widgets::*};
 use std::time::Duration;
@@ -264,7 +262,7 @@ fn make_instructions(_: &Model, f: &mut Frame, area: Rect) {
 fn update(model: &mut Model, msg: Message) -> Option<Message> {
     // println!("Message: {:?}", msg);
     match msg {
-        Message::Enter => {
+        Message::Init => {
             // Load the possible cache file
             // and updates the model
             model.load_from_cache();
@@ -290,7 +288,7 @@ fn update(model: &mut Model, msg: Message) -> Option<Message> {
 /// Convert Event to Message
 fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
     if model.running_state == RunningState::Empty {
-        return Ok(Some(Message::Enter));
+        return Ok(Some(Message::Init));
     }
 
     if event::poll(Duration::from_millis(250))? {

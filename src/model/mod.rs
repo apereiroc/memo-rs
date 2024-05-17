@@ -1,3 +1,6 @@
+pub mod entry;
+mod model_io;
+
 use crate::entry::EntryGroup;
 
 #[derive(Debug, Default, PartialEq, Eq)]

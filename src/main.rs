@@ -1,9 +1,9 @@
 mod config;
-mod entry;
 mod message;
 mod model;
-mod model_io;
-mod tui;
+mod ui;
+use crate::model::entry;
+use crate::ui::tui;
 
 use config::{PROJECT_AUTHOR, PROJECT_NAME, PROJECT_VERSION};
 use crossterm::event::{self, Event, KeyCode};

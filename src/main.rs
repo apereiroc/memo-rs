@@ -4,8 +4,8 @@ mod model;
 mod ui;
 
 use model::entry;
-use ui::main_screen::make_main_screen;
-use ui::secondary_screen::make_secondary_screen;
+use ui::main_screen::render_main_screen;
+use ui::secondary_screen::render_secondary_screen;
 use ui::tui;
 
 use crossterm::event::{self, Event, KeyCode};
@@ -58,9 +58,9 @@ fn view(model: &Model, f: &mut Frame) {
     match model.current_screen {
         CurrentScreen::Main => match model.running_state {
             RunningState::Empty => (),
-            _ => make_main_screen(model, f),
+            _ => render_main_screen(model, f),
         },
-        CurrentScreen::Secondary => make_secondary_screen(model, f),
+        CurrentScreen::Secondary => render_secondary_screen(model, f),
     }
 }
 

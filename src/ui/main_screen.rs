@@ -1,4 +1,5 @@
-use crate::config::{PROJECT_AUTHOR, PROJECT_NAME, PROJECT_VERSION};
+use super::keybindings_block::render_keybindings;
+use super::title_block::render_title;
 use crate::model::Model;
 use ratatui::widgets::block::*;
 use ratatui::{prelude::*, widgets::*};
@@ -12,8 +13,8 @@ use ratatui::{prelude::*, widgets::*};
 //  ---------------------------
 // |         INSTRUCTIONS      |
 //  ---------------------------
-pub fn make_main_screen(model: &Model, f: &mut Frame) {
-    let [title_area, data_area, instruction_area] = Layout::default()
+pub fn render_main_screen(model: &Model, f: &mut Frame) {
+    let [title_area, data_area, keybindings_area] = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
             Constraint::Length(3),
@@ -27,41 +28,10 @@ pub fn make_main_screen(model: &Model, f: &mut Frame) {
         .constraints(vec![Constraint::Percentage(25), Constraint::Percentage(75)])
         .areas(data_area);
 
-    make_title(model, f, title_area);
-    make_entries(model, f, entries_area);
-    make_preview(model, f, preview_area);
-    make_instructions(model, f, instruction_area);
-}
-
-//  ---------------------------
-// |           THIS            |
-//  ---------------------------
-// |         |                 |
-// |         |                 |
-// |         |                 |
-//  ---------------------------
-// |                           |
-//  ---------------------------
-pub(crate) fn make_title(_: &Model, f: &mut Frame, area: Rect) {
-    // Make title block
-    let title_block = Block::default()
-        .borders(Borders::ALL)
-        .style(Style::default());
-
-    // Fill text
-    let title = Paragraph::new(Text::from(
-        format!(
-            " {} v{} -- {} ",
-            PROJECT_NAME, PROJECT_VERSION, PROJECT_AUTHOR
-        )
-        .bold()
-        .yellow(),
-    ))
-    .block(title_block)
-    .centered();
-
-    // Render
-    f.render_widget(title, area);
+    render_title(model, f, title_area);
+    render_entries(model, f, entries_area);
+    render_preview(model, f, preview_area);
+    render_keybindings(model, f, keybindings_area);
 }
 
 //  ---------------------------
@@ -73,7 +43,7 @@ pub(crate) fn make_title(_: &Model, f: &mut Frame, area: Rect) {
 //  ---------------------------
 // |                           |
 //  ---------------------------
-fn make_entries(model: &Model, f: &mut Frame, area: Rect) {
+fn render_entries(model: &Model, f: &mut Frame, area: Rect) {
     let outer_block = Block::new()
         .borders(Borders::ALL)
         .title_alignment(Alignment::Left)
@@ -133,7 +103,7 @@ fn make_entries(model: &Model, f: &mut Frame, area: Rect) {
 //  ---------------------------
 // |                           |
 //  ---------------------------
-fn make_preview(model: &Model, f: &mut Frame, area: Rect) {
+fn render_preview(model: &Model, f: &mut Frame, area: Rect) {
     let outer_block = Block::new()
         .borders(Borders::ALL)
         .title_alignment(Alignment::Left)
@@ -172,32 +142,4 @@ fn make_preview(model: &Model, f: &mut Frame, area: Rect) {
 
     f.render_widget(items, inner_area);
     f.render_widget(outer_block, outer_area);
-}
-
-//  ---------------------------
-// |                           |
-//  ---------------------------
-// |         |                 |
-// |         |                 |
-// |         |                 |
-//  ---------------------------
-// |           THIS            |
-//  ---------------------------
-pub(crate) fn make_instructions(_: &Model, f: &mut Frame, area: Rect) {
-    // Make instruction block
-    let instruction_block = Block::default()
-        .borders(Borders::ALL)
-        .style(Style::default());
-
-    // Fill text
-    let instructions = Paragraph::new(
-        Text::from(" <Up>: go previous   <Down>, <Tab>: go next   <q>: quit ")
-            .bold()
-            .yellow(),
-    )
-    .block(instruction_block)
-    .centered();
-
-    // Render
-    f.render_widget(instructions, area);
 }

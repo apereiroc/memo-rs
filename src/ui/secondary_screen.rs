@@ -1,6 +1,6 @@
+use super::keybindings_block::render_keybindings;
+use super::title_block::render_title;
 use crate::model::Model;
-use crate::ui::main_screen::make_instructions;
-use crate::ui::main_screen::make_title;
 use ratatui::widgets::block::*;
 use ratatui::{prelude::*, widgets::*};
 
@@ -13,7 +13,7 @@ use ratatui::{prelude::*, widgets::*};
 //  ----------------------------
 // |         INSTRUCTIONS       |
 //  ----------------------------
-pub fn make_secondary_screen(model: &Model, f: &mut Frame) {
+pub fn render_secondary_screen(model: &Model, f: &mut Frame) {
     let [title_area, data_area, instruction_area] = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
@@ -28,10 +28,10 @@ pub fn make_secondary_screen(model: &Model, f: &mut Frame) {
         .constraints(vec![Constraint::Percentage(70), Constraint::Percentage(30)])
         .areas(data_area);
 
-    make_title(model, f, title_area);
-    make_entries(model, f, entries_area);
-    make_long_info(model, f, long_info_area);
-    make_instructions(model, f, instruction_area);
+    render_title(model, f, title_area);
+    render_entries(model, f, entries_area);
+    render_long_info(model, f, long_info_area);
+    render_keybindings(model, f, instruction_area);
 }
 
 //  ----------------------------
@@ -43,7 +43,7 @@ pub fn make_secondary_screen(model: &Model, f: &mut Frame) {
 //  ----------------------------
 // |                            |
 //  ----------------------------
-fn make_entries(model: &Model, f: &mut Frame, area: Rect) {
+fn render_entries(model: &Model, f: &mut Frame, area: Rect) {
     let outer_block = Block::new()
         .borders(Borders::ALL)
         .title_alignment(Alignment::Left)
@@ -117,7 +117,7 @@ fn make_entries(model: &Model, f: &mut Frame, area: Rect) {
 //  ----------------------------
 // |                            |
 //  ----------------------------
-fn make_long_info(model: &Model, f: &mut Frame, area: Rect) {
+fn render_long_info(model: &Model, f: &mut Frame, area: Rect) {
     let outer_block = Block::new()
         .borders(Borders::ALL)
         .title_alignment(Alignment::Left)

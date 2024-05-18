@@ -8,6 +8,7 @@ use ui::main_screen::render_main_screen;
 use ui::secondary_screen::render_secondary_screen;
 use ui::tui;
 
+use arboard::Clipboard;
 use crossterm::event::{self, Event, KeyCode};
 use message::Message;
 use model::{CurrentScreen, Model, RunningState};
@@ -32,6 +33,9 @@ fn main() -> color_eyre::Result<()> {
     tui::install_panic_hook()?;
     let mut terminal = tui::init_terminal()?;
 
+    // Initialise clipboard
+    let mut clipboard = Clipboard::new().unwrap();
+
     // Initialise model
     let mut model = Model::new(args.filename);
 
@@ -48,6 +52,12 @@ fn main() -> color_eyre::Result<()> {
             current_msg = update(&mut model, current_msg.unwrap());
         }
     }
+
+    clipboard.set_text(
+        model.entries[model.idx_entrygroup].entries[model.idx_entry]
+            .command
+            .clone(),
+    )?;
 
     // Close and exit
     tui::restore_terminal()?;
@@ -82,9 +92,14 @@ fn update(model: &mut Model, msg: Message) -> Option<Message> {
             model.previous_entry();
         }
         // Go to the secondary screen
-        Message::Enter => {
-            model.current_screen = CurrentScreen::Secondary;
-        }
+        Message::Enter => match model.current_screen {
+            CurrentScreen::Main => {
+                model.current_screen = CurrentScreen::Secondary;
+            }
+            CurrentScreen::Secondary => {
+                model.running_state = RunningState::Done;
+            }
+        },
         // Go to the main screen
         Message::Back => {
             model.current_screen = CurrentScreen::Main;

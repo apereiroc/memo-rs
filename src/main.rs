@@ -132,8 +132,8 @@ fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
 fn handle_key(key: event::KeyEvent) -> Option<Message> {
     match key.code {
         KeyCode::Char('q') => Some(Message::Quit),
-        KeyCode::Down | KeyCode::Tab => Some(Message::NextEntry),
-        KeyCode::Up => Some(Message::PreviousEntry),
+        KeyCode::Down | KeyCode::Tab | KeyCode::Char('j') => Some(Message::NextEntry),
+        KeyCode::Up | KeyCode::Char('k') => Some(Message::PreviousEntry),
         KeyCode::Enter => Some(Message::Enter),
         KeyCode::Esc => Some(Message::Back),
         _ => None,

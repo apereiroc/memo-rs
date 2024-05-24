@@ -1,4 +1,4 @@
-use super::keybindings_block::render_keybindings;
+use super::keybindings_block::render_keybindings_main_screen;
 use super::title_block::render_title;
 use crate::model::Model;
 use ratatui::widgets::block::*;
@@ -31,7 +31,7 @@ pub fn render_main_screen(model: &Model, f: &mut Frame) {
     render_title(model, f, title_area);
     render_entries(model, f, entries_area);
     render_preview(model, f, preview_area);
-    render_keybindings(model, f, keybindings_area);
+    render_keybindings_main_screen(model, f, keybindings_area);
 }
 
 //  ---------------------------

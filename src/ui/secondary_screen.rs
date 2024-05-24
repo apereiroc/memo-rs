@@ -1,4 +1,4 @@
-use super::keybindings_block::render_keybindings;
+use super::keybindings_block::render_keybindings_secondary_screen;
 use super::title_block::render_title;
 use crate::model::Model;
 use ratatui::widgets::block::*;
@@ -31,7 +31,7 @@ pub fn render_secondary_screen(model: &Model, f: &mut Frame) {
     render_title(model, f, title_area);
     render_entries(model, f, entries_area);
     render_long_info(model, f, long_info_area);
-    render_keybindings(model, f, instruction_area);
+    render_keybindings_secondary_screen(model, f, instruction_area);
 }
 
 //  ----------------------------

@@ -1,5 +1,9 @@
 use serde::{Deserialize, Serialize};
 
+/// Entry model. Saves information about the command string that will be returned by the
+/// application, a brief description that will be shown to indicate what that command does,
+/// and a long description that the user can pass to explain more in detail what the command does,
+/// or to give an example, or whatever
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Entry {
     pub command: String,
@@ -7,6 +11,8 @@ pub struct Entry {
     pub long_info: String,
 }
 
+/// Entry group model. Saves a global description and a vector of entries
+/// e.g. cmake - 1. create build files 2. build 3. install
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct EntryGroup {
     pub description: String,

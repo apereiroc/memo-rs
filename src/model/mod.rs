@@ -3,6 +3,7 @@ mod model_io;
 
 use crate::entry::EntryGroup;
 
+/// Model's current running state
 #[derive(Debug, Default, PartialEq, Eq)]
 pub enum RunningState {
     #[default]
@@ -11,6 +12,7 @@ pub enum RunningState {
     Done,
 }
 
+/// Screen that is currently shown
 #[derive(Debug, Default, PartialEq)]
 pub enum CurrentScreen {
     #[default]
@@ -18,6 +20,8 @@ pub enum CurrentScreen {
     Secondary,
 }
 
+/// Flagship struct in the package. Contains all needed information to display the correct
+/// behaviour
 #[derive(Debug, Default)]
 pub struct Model {
     pub file: String,
@@ -29,6 +33,7 @@ pub struct Model {
 }
 
 impl Model {
+    /// Create a new object
     pub fn new(file: String) -> Model {
         Model {
             file,
@@ -40,6 +45,7 @@ impl Model {
         }
     }
 
+    /// Update entry/entrygroup iterator to highlight the next entry
     pub fn next_entry(&mut self) {
         match self.current_screen {
             CurrentScreen::Main => {
@@ -52,6 +58,7 @@ impl Model {
         }
     }
 
+    /// Update entry/entrygroup iterator to highlight the previous entry
     pub fn previous_entry(&mut self) {
         match self.current_screen {
             CurrentScreen::Main => {

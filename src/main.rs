@@ -64,6 +64,7 @@ fn main() -> color_eyre::Result<()> {
     Ok(())
 }
 
+/// Render screen given the state of the model
 fn view(model: &Model, f: &mut Frame) {
     match model.current_screen {
         CurrentScreen::Main => match model.running_state {
@@ -113,7 +114,7 @@ fn update(model: &mut Model, msg: Message) -> Option<Message> {
     None
 }
 
-/// Convert Event to Message
+/// Convert general Event to Message
 fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
     if model.running_state == RunningState::Empty {
         return Ok(Some(Message::Init));
@@ -129,6 +130,7 @@ fn handle_event(model: &Model) -> color_eyre::Result<Option<Message>> {
     Ok(None)
 }
 
+/// Convert KeyEvent to Message
 fn handle_key(key: event::KeyEvent) -> Option<Message> {
     match key.code {
         KeyCode::Char('q') => Some(Message::Quit),

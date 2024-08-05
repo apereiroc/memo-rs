@@ -1,5 +1,6 @@
 use super::keybindings_block::render_keybindings_main_screen;
 use super::title_block::render_title;
+use crate::config::*;
 use crate::model::Model;
 use ratatui::widgets::block::*;
 use ratatui::{prelude::*, widgets::*};
@@ -55,7 +56,7 @@ fn render_entries(model: &Model, f: &mut Frame, area: Rect) {
         })
         // .fg(TEXT_COLOR)
         // .bg(TODO_HEADER_BG)
-        .title("Entry list");
+        .title(MAIN_SCREEN_ENTRIES_TITLE);
     let inner_block = Block::new()
         // .fg(TEXT_COLOR)
         // .bg(NORMAL_ROW_COLOR)
@@ -80,7 +81,7 @@ fn render_entries(model: &Model, f: &mut Frame, area: Rect) {
                 .add_modifier(Modifier::BOLD)
                 .bg(Color::LightCyan),
         )
-        .highlight_symbol(">> ")
+        .highlight_symbol(ITEM_SELECTION_SYMBOL_STRING)
         // .scroll_padding(1)
         .repeat_highlight_symbol(true)
         .direction(ListDirection::TopToBottom);
@@ -115,7 +116,7 @@ fn render_preview(model: &Model, f: &mut Frame, area: Rect) {
         })
         // .fg(TEXT_COLOR)
         // .bg(TODO_HEADER_BG)
-        .title("Preview");
+        .title(MAIN_SCREEN_PREVIEW_TITLE);
     let inner_block = Block::new()
         // .fg(TEXT_COLOR)
         // .bg(NORMAL_ROW_COLOR)

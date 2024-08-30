@@ -1,17 +1,17 @@
-# Rustmember
+# memo-rs
 
-If you always forget that one command you use every day, or you have to run long sequences of commands then **rustmember** is here to help you
+Do you often forget that one command you use daily, or find yourself running long sequences of commands repeatedly? **memo-rs** is here to make your life easier
 
-**rustmember** is a terminal application that acts as a database of commands with short and/or long explanations, and stands out for offering the possibility of copying them to the clipboard in a very simple way.
+**memo-rs** (pronounced as _memories_) is a terminal application designed to serve as your personal command database. It not only stores commands with detailed explanations but also allows you to copy them to your clipboard effortlessly.
 
 ## Usage
 
-**rustmember is still in an early state of development**. You can compile and use it but you may not be as happy with it as you will be when it is in a more advanced state.
+**memo-rs is still in its early stages of development**. You can compile and use it, but the experience may not be as good as it will be in future versions
 
-If you still want to try it, you can do 
+If you want to give it a try, just follow these steps 
 
 ```bash
-git clone git@github.com:apereiroc/rustmember.git
+git clone git@github.com:apereiroc/memo-rs.git
 cd rustmember
 cargo run -- --filename examples/demo.json
 ```

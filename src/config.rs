@@ -1,3 +1,5 @@
+use ratatui::style::Color;
+
 /// Project name
 pub const PROJECT_NAME: &str = env!("CARGO_PKG_NAME");
 
@@ -17,6 +19,9 @@ pub const KEYBINDINGS_INFO_SECONDARY_SCREEN: &str =
 
 /// Symbol rendered at the selected object
 pub const ITEM_SELECTION_SYMBOL_STRING: &str = ">> ";
+
+/// Color for the selected object
+pub const SELECTION_COLOR: Color = Color::LightMagenta;
 
 /// Title for entry list rendered in main screen
 pub const MAIN_SCREEN_ENTRIES_TITLE: &str = "Entry list";

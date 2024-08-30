@@ -1,5 +1,6 @@
 use super::keybindings_block::render_keybindings_secondary_screen;
 use super::title_block::render_title;
+use crate::config::*;
 use crate::model::Model;
 use ratatui::widgets::block::*;
 use ratatui::{prelude::*, widgets::*};
@@ -55,7 +56,7 @@ fn render_entries(model: &Model, f: &mut Frame, area: Rect) {
         })
         // .fg(TEXT_COLOR)
         // .bg(TODO_HEADER_BG)
-        .title("Entry list");
+        .title(SECONDARY_SCREEN_ENTRIES_TITLE);
     let inner_block = Block::new()
         // .fg(TEXT_COLOR)
         // .bg(NORMAL_ROW_COLOR)
@@ -66,7 +67,7 @@ fn render_entries(model: &Model, f: &mut Frame, area: Rect) {
     let inner_area = outer_block.inner(outer_area);
 
     // Get list of items
-    let (cmds, infos): (Vec<String>, Vec<String>) = model.entries[model.idx_entrygroup]
+    let (cmds, _infos): (Vec<String>, Vec<String>) = model.entries[model.idx_entrygroup]
         .entries
         .iter()
         .map(|entry| {
@@ -89,15 +90,15 @@ fn render_entries(model: &Model, f: &mut Frame, area: Rect) {
         .repeat_highlight_symbol(true)
         .direction(ListDirection::TopToBottom);
 
-    let infos = List::new(infos)
-        .block(inner_block)
-        .style(Style::default().fg(Color::White))
-        .highlight_style(
-            Style::default()
-                .add_modifier(Modifier::BOLD)
-                .bg(Color::LightCyan),
-        )
-        .direction(ListDirection::TopToBottom);
+    // let infos = List::new(_infos)
+    //     .block(inner_block)
+    //     .style(Style::default().fg(Color::White))
+    //     .highlight_style(
+    //         Style::default()
+    //             .add_modifier(Modifier::BOLD)
+    //             .bg(Color::LightCyan),
+    //     )
+    //     .direction(ListDirection::TopToBottom);
 
     // Get current selected item
     let mut current_state = ListState::default();
@@ -129,7 +130,7 @@ fn render_long_info(model: &Model, f: &mut Frame, area: Rect) {
         })
         // .fg(TEXT_COLOR)
         // .bg(TODO_HEADER_BG)
-        .title("Preview");
+        .title(SECONDARY_SCREEN_LONG_INFO_TITLE);
     let inner_block = Block::new()
         // .fg(TEXT_COLOR)
         // .bg(NORMAL_ROW_COLOR)

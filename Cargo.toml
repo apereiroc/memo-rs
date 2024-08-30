@@ -1,5 +1,5 @@
 [package]
-name = "rustmember"
+name = "memors"
 version = "0.1.0-alpha.3"
 edition = "2021"
 authors = ["Asier Pereiro Castro"]

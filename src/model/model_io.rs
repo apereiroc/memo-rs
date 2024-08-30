@@ -8,6 +8,7 @@ use std::io::Write;
 use std::path::Path;
 
 impl Model {
+    /// Load model state from cache file
     pub fn load_from_cache(&mut self) {
         if self.file.is_empty() {
             panic!("Trying to read previous status, but no path was specified");
@@ -35,12 +36,14 @@ impl Model {
             }
             Err(_) => {
                 // File does not exist, do nothing
+                // TODO: automate cache file?
             }
         }
 
         self.running_state = RunningState::Loaded;
     }
 
+    /// Load model state to cache file
     pub fn save_to_cache(&mut self) {
         if self.file.is_empty() {
             panic!("Trying to save current status, but no path was specified");

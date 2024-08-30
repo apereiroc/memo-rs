@@ -4,7 +4,7 @@ Do you often forget that one command you use daily, or find yourself running lon
 
 **memo-rs** (pronounced as _memories_) is a terminal application designed to serve as your personal command database. It not only stores commands with detailed explanations but also allows you to copy them to your clipboard effortlessly.
 
-![](https://github.com/memo-rs/img/demo.gif)
+![](img/demo.gif)
 
 ## Usage
 

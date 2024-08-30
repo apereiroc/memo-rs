@@ -83,7 +83,7 @@ fn render_entries(model: &Model, f: &mut Frame, area: Rect) {
         .highlight_style(
             Style::default()
                 .add_modifier(Modifier::BOLD)
-                .bg(Color::LightCyan),
+                .bg(SELECTION_COLOR),
         )
         .highlight_symbol(">> ")
         // .scroll_padding(1)

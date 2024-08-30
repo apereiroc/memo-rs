@@ -14,6 +14,6 @@ If you want to give it a try, just follow these steps
 
 ```bash
 git clone git@github.com:apereiroc/memo-rs.git
-cd rustmember
+cd memo-rs
 cargo run -- --filename examples/demo.json
 ```
